@@ -2,7 +2,7 @@
 FROM pytorch/pytorch:2.0.0-cuda11.7-cudnn8-runtime
 
 # Environment variable
-ENV HOME /home/tesztuser
+ENV HOME /home/testuser
 RUN mkdir -p $HOME/DeepLearning_Assignment
 WORKDIR $HOME/DeepLearning_Assignment
 ENV CSV=${CSV:-$HOME/DeepLearning_Assignment/disgenet-GDA.csv}

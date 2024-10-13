@@ -4,3 +4,4 @@ seaborn==0.13.2
 matplotlib==3.9.2
 scikit-learn==1.5.2
 torch-geometric==2.6.1
+jupyterlab==4.2.5

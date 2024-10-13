@@ -15,7 +15,10 @@ The goal of this project is to create a graph neural network for predicting dise
 - disgenet-GDA_cancer.csv & preprocessed_GDA_df_cancer.csv
 
 **Related works (papers, GitHub repositories, blog posts, etc)** <br>
-XYZ
+- [Related GitHub repository](https://github.com/pyg-team/pytorch_geometric)
+- [Dataset](https://www.disgenet.org/)
+- [Related papers 1](https://arxiv.org/abs/1607.00653)
+- [Related papers 2](https://arxiv.org/abs/1611.07308)
 
 **How to run it (building and running the container, running your solution within the container)** <br>
 XYZ

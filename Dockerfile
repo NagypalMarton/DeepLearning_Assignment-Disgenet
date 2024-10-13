@@ -7,6 +7,9 @@ RUN mkdir -p $HOME/DeepLearning_Assignment
 WORKDIR $HOME/DeepLearning_Assignment
 ENV CSV=${CSV:-$HOME/DeepLearning_Assignment/disgenet-GDA.csv}
 
+# Install Git and other dependencies
+RUN apt-get update && apt-get install -y git
+
 # Copy local files into the container
 COPY . .
 

@@ -1,0 +1,20 @@
+services:
+  srserver:
+  build:
+    context: ./
+    dockerfile: Dockerfile
+  image: deeplearningassdis
+  container_name: deeplearningassdis_con
+  volumes:
+    - .:/home/testuser/
+  ports:
+    - "8899:8888"
+    - "2299:22"
+  restart: unless-stopped
+  deploy:
+    resources:
+    reservations:
+    devices:
+    - driver: "nvidia"
+      capabilities: [ "gpu" ]
+      count: 1

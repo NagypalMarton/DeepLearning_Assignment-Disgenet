@@ -8,14 +8,19 @@ WORKDIR $HOME/DeepLearning_Assignment
 ENV CSV=${CSV:-$HOME/DeepLearning_Assignment/disgenet-GDA.csv}
 
 # Install Git and other dependencies
-RUN apt-get update && apt-get install -y git
+RUN apt-get update && apt-get install -y git mc libgl1 openssh-server
 
 # Copy local files into the container
 COPY . .
+COPY ssh/sshd_config /etc/ssh/sshd_config
 
 # Install Python dependencies from requirements.txt
 RUN pip install --upgrade pip \
     && pip install --no-cache-dir -r requirements.txt
+
+# ADD User
+RUN useradd -rm -d $HOME -s /bin/bash -g root -G sudo -u 1000 testuser
+RUN echo 'testuser:admin123' | chpasswd
 
 # Clone the GitHub repository into the project directory
 RUN git clone https://github.com/NagypalMarton/DeepLearning_Assignment-Disgenet.git $HOME/DeepLearning_Assignment-Disgenet
@@ -25,6 +30,18 @@ WORKDIR $HOME/DeepLearning_Assignment-Disgenet
 
 # Expose port 8888 for Jupyter Notebook
 EXPOSE 8888
+EXPOSE 22
+
+SHELL ["/bin/bash", "-l", "-c"]
 
 # Default command to run JupyterLab
-CMD ["jupyter-lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+#CMD ["jupyter-lab", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+
+# Start Jupyter lab with custom password
+ENTRYPOINT service ssh start && jupyter-lab \
+    --ip 0.0.0.0 \
+    --port 8888 \
+    --no-browser \
+    --NotebookApp.notebook_dir='$home' \
+    --ServerApp.terminado_settings="shell_command=['/bin/bash']" \
+    --allow-root

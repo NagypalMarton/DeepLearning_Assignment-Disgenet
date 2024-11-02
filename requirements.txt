@@ -1,7 +1,7 @@
 scikit-learn==1.5.2
 seaborn==0.13.2
 pandas==2.2.3
-numpy==2.1.2
+numpy==2.0.2
 matplotlib==3.9.2
 torch-geometric==2.6.1
 jupyterlab==4.2.5
@@ -11,5 +11,5 @@ jupyter-core==5.7.2
 jupyter-server-terminals==0.5.3
 jupyter-events==0.10.0
 jupyterlab-pygments==0.3.0
-tensorflow==2.13.0
-gradio==3.44.2
+tensorflow==2.18.0
+gradio==5.4.0

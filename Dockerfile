@@ -1,6 +1,5 @@
 # Use an official PyTorch image with CUDA support 
 FROM pytorch/pytorch:2.0.0-cuda11.7-cudnn8-runtime
-FROM python:3.13.0-bookworm
 
 ARG GRADIO_SERVER_PORT=7860
 
@@ -15,12 +14,7 @@ ENV GRADIO_SERVER_PORT=${GRADIO_SERVER_PORT}
 # Install Git and other dependencies
 RUN apt-get update && apt-get install -y git openssh-server mc
 
-RUN useradd -rm -d $HOME -s /bin/bash -g root -G sudo -u 1000 testuser
-RUN echo 'testuser:password' | chpasswd
-
 SHELL ["/bin/bash", "-l", "-c"]
-
-#COPY requirements.txt requirements.txt
 
 # ADD User
 RUN useradd -rm -d $HOME -s /bin/bash -g root -G sudo -u 1000 testuser
@@ -52,4 +46,8 @@ ENTRYPOINT service ssh start && jupyter-lab \
 	--no-browser \
 	--NotebookApp.notebook_dir='$home' \
 	--ServerApp.terminado_settings="shell_command=['/bin/bash']" \
-	--allow-root
+	--allow-root & \
+	python -m gradio.app --server.port=${GRADIO_SERVER_PORT} --server.host=0.0.0.0
+
+#Docker Konténer indítása
+# docker run -p 8888:8888 -p 7860:7860 -p 22:22 dl_disgenet

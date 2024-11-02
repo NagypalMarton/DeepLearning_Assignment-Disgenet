@@ -8,8 +8,9 @@ services:
   volumes:
     - .:/home/testuser/
   ports:
-    - "8899:8888"
-    - "2299:22"
+    - "8899:8888" #Jupiter
+    - "2299:22"   #SSH
+    - "7860:7860" #GRADIO
   restart: unless-stopped
   deploy:
     resources:

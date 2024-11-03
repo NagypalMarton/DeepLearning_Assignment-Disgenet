@@ -23,6 +23,8 @@ The goal of this project is to create a graph neural network for predicting dise
 - [Related papers 2](https://arxiv.org/abs/1611.07308)
 
 **How to run it (building and running the container, running your solution within the container)** <br>
+0. **Add the NVIDIA-Container-toolkit to OS**
+Go to the [Official NVIDIA website](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) for installing and configure! And install [CUDA Toolkit](https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=24.04&target_type=deb_network).
 
 1. **Build the Docker container:**
     ```bash

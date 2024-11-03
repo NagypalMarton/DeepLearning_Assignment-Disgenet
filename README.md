@@ -23,4 +23,24 @@ The goal of this project is to create a graph neural network for predicting dise
 - [Related papers 2](https://arxiv.org/abs/1611.07308)
 
 **How to run it (building and running the container, running your solution within the container)** <br>
-XYZ
+
+1. **Build the Docker container:**
+    ```bash
+    docker-compose build
+    ```
+
+2. **Run the Docker container:**
+    ```bash
+    docker-compose up
+    ```
+
+3. **Access JupyterLab:**
+    Open your web browser and navigate to `http://localhost:8899`. You should see the JupyterLab interface.
+
+4. **Access the container via SSH:**
+    ```bash
+    ssh -p 2299 user@localhost
+    ```
+
+5. **Run the solution within the container:**
+    Open the Jupyter notebook `Mélytanulás_Beadandó_Csibi_Alexandra,_Nagypál_Márton.ipynb` in JupyterLab and execute the cells to run the solution.

@@ -44,3 +44,6 @@ The goal of this project is to create a graph neural network for predicting dise
 
 5. **Run the solution within the container:**
     Open the Jupyter notebook `Mélytanulás_Beadandó_Csibi_Alexandra,_Nagypál_Márton.ipynb` in JupyterLab and execute the cells to run the solution.
+
+**How to run the pipeline? How to train the models? How to evaluate the models?** <br>
+Sooner

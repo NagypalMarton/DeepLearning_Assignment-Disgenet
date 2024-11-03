@@ -12,7 +12,7 @@ ENV preProc_GDA_cancer=${CSV:-$HOME/DeepLearning_Assignment/preprocessed_GDA_df_
 ENV GRADIO_SERVER_PORT=${GRADIO_SERVER_PORT}
 
 # Install Git and other dependencies
-RUN apt-get update && apt-get install -y git openssh-server mc
+RUN apt-get update && apt-get install -y git openssh-server mc libgl1 
 
 SHELL ["/bin/bash", "-l", "-c"]
 
@@ -48,6 +48,4 @@ ENTRYPOINT service ssh start && jupyter-lab \
 	--ServerApp.terminado_settings="shell_command=['/bin/bash']" \
 	--allow-root & \
 	python -m gradio.app --server.port=${GRADIO_SERVER_PORT} --server.host=0.0.0.0
-
-#Docker Konténer indítása
-# docker run -p 8888:8888 -p 7860:7860 -p 22:22 dl_disgenet
+	

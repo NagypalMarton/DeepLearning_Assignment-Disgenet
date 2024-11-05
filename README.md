@@ -18,9 +18,10 @@ The goal of this project is to create a graph neural network for predicting dise
 
 **Related works (papers, GitHub repositories, blog posts, etc)** <br>
 - [Related GitHub repository](https://github.com/pyg-team/pytorch_geometric)
+- [Related GitHub repository](https://github.com/sujitpal/pytorch-gnn-tutorial-odsc2021)
+- [Related YouTube video](https://www.youtube.com/watch?v=-UjytpbqX4A&list=LL&index=1)
 - [Dataset](https://www.disgenet.org/)
-- [Related papers 1](https://arxiv.org/abs/1607.00653)
-- [Related papers 2](https://arxiv.org/abs/1611.07308)
+
 
 **How to run it (building and running the container, running your solution within the container)** <br>
 0. **Add the NVIDIA-Container-toolkit to OS**
@@ -52,16 +53,19 @@ Go to the [Official NVIDIA website](https://docs.nvidia.com/datacenter/cloud-nat
 To run the pipeline, start by setting up the environment within the Docker container, ensuring that all dependencies, including PyTorch, PyTorch Geometric, CUDA (for GPU support), and other required libraries, are installed. This environment setup is automatically managed when you build the container using `docker-compose`. With the environment ready, perform data acquisition by running the script to retrieve disease-gene associations from the DisGeNET API. In JupyterLab, you can use the following code to acquire data:
 
 ```python
-from data_acquisition import get_disease_ids, download_all_gda
-disease_ids = get_disease_ids("cancer")  # Replace "cancer" with other disease types as needed
-download_all_gda(disease_ids)
-```
+from data_acquisition_processing import get_data
 
-This step will save the raw data to a file named `GDA_df_raw.csv`. Next, preprocess the raw data to prepare it for model training by running:
+df = get_data("your_api_key", "disease_type") # Replace "your_api_key" and "disease_type" with actual values (e.g., "cancer").
+```
+Alternatively, you can download the processed data directly from GitHub:
 
 ```python
-from data_preprocessing import preprocess_data
-preprocess_data('GDA_df_raw.csv', 'GDA_df_processed.csv')
+url = "https://raw.githubusercontent.com/NagypalMarton/DeepLearning_Assignment-Disgenet/main/GDA_df_processed.csv"
+response = requests.get(url)
+with open("GDA_df_processed.csv", "wb") as file:
+    file.write(response.content)
+
+df = pd.read_csv("GDA_df_processed.csv")
 ```
 
 This function generates a cleaned and encoded dataset called `GDA_df_processed.csv`, which is ready for use in the model. To prepare the data in graph format for the model, initialize the dataset with the `GDADataset` class. This will structure the disease-gene data for graph-based analysis:

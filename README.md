@@ -47,5 +47,70 @@ Go to the [Official NVIDIA website](https://docs.nvidia.com/datacenter/cloud-nat
 5. **Run the solution within the container:**
     Open the Jupyter notebook `Mélytanulás_Beadandó_Csibi_Alexandra,_Nagypál_Márton.ipynb` in JupyterLab and execute the cells to run the solution.
 
-**How to run the pipeline? How to train the models? How to evaluate the models?** <br>
-Sooner
+**How to run the pipeline?**<br>
+
+To run the pipeline, start by setting up the environment within the Docker container, ensuring that all dependencies, including PyTorch, PyTorch Geometric, CUDA (for GPU support), and other required libraries, are installed. This environment setup is automatically managed when you build the container using `docker-compose`. With the environment ready, perform data acquisition by running the script to retrieve disease-gene associations from the DisGeNET API. In JupyterLab, you can use the following code to acquire data:
+
+```python
+from data_acquisition import get_disease_ids, download_all_gda
+disease_ids = get_disease_ids("cancer")  # Replace "cancer" with other disease types as needed
+download_all_gda(disease_ids)
+```
+
+This step will save the raw data to a file named `GDA_df_raw.csv`. Next, preprocess the raw data to prepare it for model training by running:
+
+```python
+from data_preprocessing import preprocess_data
+preprocess_data('GDA_df_raw.csv', 'GDA_df_processed.csv')
+```
+
+This function generates a cleaned and encoded dataset called `GDA_df_processed.csv`, which is ready for use in the model. To prepare the data in graph format for the model, initialize the dataset with the `GDADataset` class. This will structure the disease-gene data for graph-based analysis:
+
+```python
+from data_module import GDADataset
+dataset = GDADataset(data_dir='./data/')
+```
+
+**How to train the models?**<br>
+
+To train the model, start by setting up the `GDADataModule`, which organizes the data into training, validation, and test sets. Initialize the data module with the following code:
+
+```python
+from data_module import GDADataModule
+datamodule = GDADataModule(data_dir='./data/', batch_size=32)
+datamodule.setup()
+```
+
+Next, initialize the graph neural network model (`GCNLinkPredictor`) with the specified input dimensions, hidden layer size, and learning rate:
+
+```python
+from model import GCNLinkPredictor
+model = GCNLinkPredictor(input_dim=datamodule.train_data.x.shape[1], hidden_dim=64, lr=1e-2)
+```
+
+After initializing the model, configure the PyTorch Lightning Trainer with settings such as GPU support, the number of epochs, and a callback for saving the best model checkpoints. Start training with the following code:
+
+```python
+from pytorch_lightning import Trainer
+from pytorch_lightning.callbacks import ModelCheckpoint
+
+checkpoint_callback = ModelCheckpoint()
+trainer = Trainer(
+    max_epochs=20,
+    log_every_n_steps=1,
+    accelerator="gpu",
+    devices=1,
+    callbacks=[checkpoint_callback]
+)
+trainer.fit(model, datamodule)
+```
+
+**How to evaluate the models?** <br>
+
+After training, evaluate the model’s performance on the test set by running:
+
+```python
+trainer.test(model, datamodule)
+```
+
+During evaluation, key performance metrics such as **Binary Cross-Entropy Loss** and **AUROC (Area Under Receiver Operating Characteristic Curve)** are calculated. These metrics provide insight into the model's prediction accuracy and its ability to distinguish between true disease-gene associations and false ones, giving a clear measure of its classification effectiveness.

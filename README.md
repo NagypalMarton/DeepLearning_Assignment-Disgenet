@@ -68,7 +68,7 @@ with open("GDA_df_processed.csv", "wb") as file:
 df = pd.read_csv("GDA_df_processed.csv")
 ```
 
-This function generates a cleaned and encoded dataset called `GDA_df_processed.csv`, which is ready for use in the model. To prepare the data in graph format for the model, initialize the dataset with the `GDADataset` class. This will structure the disease-gene data for graph-based analysis:
+To prepare the data in graph format for the model, initialize the dataset with the `GDADataset` class. This will structure the disease-gene data for graph-based analysis:
 
 ```python
 from data_module import GDADataset

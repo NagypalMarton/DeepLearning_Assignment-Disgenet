@@ -56,13 +56,14 @@ To run the pipeline, start by setting up the environment within the Docker conta
 from data_acquisition_processing import get_data
 
 df = get_data("your_api_key", "disease_type") # Replace "your_api_key" and "disease_type" with actual values (e.g., "cancer").
+df.to_csv("/data/raw/GDA_df_processed.csv", index=False)
 ```
 Alternatively, you can download the processed data directly from GitHub:
 
 ```python
 url = "https://raw.githubusercontent.com/NagypalMarton/DeepLearning_Assignment-Disgenet/main/GDA_df_processed.csv"
 response = requests.get(url)
-with open("GDA_df_processed.csv", "wb") as file:
+with open("/data/raw/GDA_df_processed.csv", "wb") as file:
     file.write(response.content)
 
 df = pd.read_csv("GDA_df_processed.csv")

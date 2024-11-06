@@ -1,9 +1,7 @@
-# Use an official PyTorch image with CUDA support 
 FROM pytorch/pytorch:2.0.0-cuda11.7-cudnn8-runtime
 
 ARG GRADIO_SERVER_PORT=7860
 
-# Environment variable
 ENV HOME /home/testuser
 RUN mkdir -p $HOME/DeepLearning_Assignment
 WORKDIR $HOME/DeepLearning_Assignment
@@ -11,12 +9,21 @@ ENV DGN_GDA_cancer=${CSV:-$HOME/DeepLearning_Assignment/GDA_df_raw.csv}
 ENV preProc_GDA_cancer=${CSV:-$HOME/DeepLearning_Assignment/GDA_df_processed.csv}
 ENV GRADIO_SERVER_PORT=${GRADIO_SERVER_PORT}
 
-# Install Git and other dependencies
-RUN apt-get update && apt-get install -y git openssh-server mc libgl1 
+# Install necessary build tools and dependencies
+RUN apt-get update && apt-get install -y \
+    git \
+    openssh-server \
+    mc \
+    libgl1 \
+    build-essential \
+    cmake \
+    libopenblas-dev \
+    liblapack-dev \
+    python3-dev
 
 SHELL ["/bin/bash", "-l", "-c"]
 
-# ADD User
+# Add user
 RUN useradd -rm -d $HOME -s /bin/bash -g root -G sudo -u 1000 testuser
 RUN echo 'testuser:admin123' | chpasswd
 
@@ -41,11 +48,10 @@ EXPOSE ${GRADIO_SERVER_PORT}
 
 # Start Jupyter lab with custom password
 ENTRYPOINT service ssh start && jupyter-lab \
-	--ip 0.0.0.0 \
-	--port 8888 \
-	--no-browser \
-	--NotebookApp.notebook_dir='$home' \
-	--ServerApp.terminado_settings="shell_command=['/bin/bash']" \
-	--allow-root & \
-	python -m gradio.app --server.port=${GRADIO_SERVER_PORT} --server.host=0.0.0.0
-	
+    --ip 0.0.0.0 \
+    --port 8888 \
+    --no-browser \
+    --NotebookApp.notebook_dir='$home' \
+    --ServerApp.terminado_settings="shell_command=['/bin/bash']" \
+    --allow-root & \
+    python -m gradio.app --server.port=${GRADIO_SERVER_PORT} --server.host=0.0.0.0

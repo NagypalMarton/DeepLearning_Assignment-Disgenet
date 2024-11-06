@@ -1,7 +1,7 @@
 scikit-learn==1.5.2
 seaborn==0.13.2
 pandas==2.2.3
-numpy==2.0.2
+numpy==1.26.4
 matplotlib==3.9.2
 torch-geometric==2.6.1
 jupyterlab==4.2.5
@@ -15,7 +15,7 @@ tensorflow==2.18.0
 gradio==5.4.0
 torch==2.1.1
 pytorch-lightning==2.4.0
-pytorch-sparse==0.6.18
+torch-sparse==0.4.4
 torch-spline-conv==1.2.2
 torch-cluster==1.6.3
-torchmetrics==0.5.1
+torchmetrics==1.5.1

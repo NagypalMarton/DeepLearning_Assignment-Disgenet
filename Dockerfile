@@ -7,8 +7,8 @@ ARG GRADIO_SERVER_PORT=7860
 ENV HOME /home/testuser
 RUN mkdir -p $HOME/DeepLearning_Assignment
 WORKDIR $HOME/DeepLearning_Assignment
-ENV DGN_GDA_cancer=${CSV:-$HOME/DeepLearning_Assignment/disgenet-GDA_cancer.csv}
-ENV preProc_GDA_cancer=${CSV:-$HOME/DeepLearning_Assignment/preprocessed_GDA_df_cancer.csv}
+ENV DGN_GDA_cancer=${CSV:-$HOME/DeepLearning_Assignment/GDA_df_raw.csv}
+ENV preProc_GDA_cancer=${CSV:-$HOME/DeepLearning_Assignment/GDA_df_processed.csv}
 ENV GRADIO_SERVER_PORT=${GRADIO_SERVER_PORT}
 
 # Install Git and other dependencies

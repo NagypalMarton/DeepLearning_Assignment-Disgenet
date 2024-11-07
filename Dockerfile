@@ -1,6 +1,8 @@
-FROM pytorch/pytorch:2.0.0-cuda11.7-cudnn8-runtime
+# FROM pytorch/pytorch:2.0.0-cuda11.7-cudnn8-runtime
+FROM python:3.13.0-bookworm
 
 ARG GRADIO_SERVER_PORT=7860
+ARG Jupiter_NoteBook_Port=8888
 
 ENV HOME /home/testuser
 RUN mkdir -p $HOME/DeepLearning_Assignment
@@ -43,13 +45,13 @@ RUN pip install --upgrade pip \
 
 # Expose port 8888 for Jupyter Notebook, 22 (ssh) && GRADIO
 EXPOSE 22
-EXPOSE 8888
+EXPOSE ${Jupiter_NoteBook_Port}
 EXPOSE ${GRADIO_SERVER_PORT}
 
 # Start Jupyter lab with custom password
 ENTRYPOINT service ssh start && jupyter-lab \
     --ip 0.0.0.0 \
-    --port 8888 \
+    --port ${Jupiter_NoteBook_Port} \
     --no-browser \
     --NotebookApp.notebook_dir='$home' \
     --ServerApp.terminado_settings="shell_command=['/bin/bash']" \

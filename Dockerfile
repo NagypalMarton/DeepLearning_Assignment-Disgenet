@@ -2,7 +2,6 @@
 FROM ubuntu:22.04
 
 ARG GRADIO_SERVER_PORT=7860
-ARG Jupiter_NoteBook_Port=8888
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Budapest
 
@@ -13,9 +12,8 @@ ENV DGN_GDA_cancer=${CSV:-$HOME/DeepLearning_Assignment/GDA_df_raw.csv}
 ENV preProc_GDA_cancer=${CSV:-$HOME/DeepLearning_Assignment/GDA_df_processed.csv}
 ENV GRADIO_SERVER_PORT=${GRADIO_SERVER_PORT}
 
-# Expose port 8888 for Jupyter Notebook, 22 (ssh) && GRADIO
+# Expose port 22 (ssh) && GRADIO
 EXPOSE 22
-EXPOSE 8888
 EXPOSE ${GRADIO_SERVER_PORT}
 
 # Install necessary build tools and dependencies
@@ -57,11 +55,4 @@ RUN pip install --upgrade pip \
     && pip3 install --no-cache-dir -r requirements.txt
 
 # Start Jupyter lab with custom password
-ENTRYPOINT service ssh start && jupyter-lab \
-    --ip 0.0.0.0 \
-    --port 8888 \
-    --no-browser \
-    --NotebookApp.notebook_dir='$home' \
-    --ServerApp.terminado_settings="shell_command=['/bin/bash']" \
-    --allow-root & \
-    python -m gradio.app --server.port=${GRADIO_SERVER_PORT} --server.host=0.0.0.0
+CMD service ssh start && python3 main.py

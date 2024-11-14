@@ -1,21 +1,14 @@
+version: '3.8'
+
 services:
-  srserver:
+  deeplearning_disgenet:
     build:
-      context: ./
+      context: .
       dockerfile: Dockerfile
-    image: dl_disgenet
-    container_name: dl_disgenet_con
-    volumes:
-      - .:/home/testuser/
     ports:
-      - "8899:8888" #Jupiter
-      - "2299:22"   #SSH
-      - "7860:7860" #GRADIO
-    restart: unless-stopped
- #   deploy:
-  #    resources:
-   #     reservations:
-    #      devices:
-     #       - driver: "nvidia"
-      #        capabilities: [ "gpu" ]
-       #       count: 1
+      - "7860:7860"
+    environment:
+      - GRADIO_SERVER_NAME=0.0.0.0
+      - GRADIO_SERVER_PORT=7860
+    volumes:
+      - .:/app

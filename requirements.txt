@@ -1,0 +1,4 @@
+gradio==5.5.0
+torch-geometric==2.6.1
+pandas==2.2.3
+scikit-learn==1.5.2

@@ -1,0 +1,26 @@
+Grading
+
+Option A
+--------
+• Oral exam (for mark)
+• Assessment from 350 points +1 mark (max 500 points)
+• Project work on a basic level (for signature)
+
+Option B
+--------
+• No exam
+• Assessment
+• min 200 / 500 points
+• from 350 points +1 mark
+• Project work on an intermediate/advanced level (for mark 4 or mark 5)
+
+Intermediate / advanced level
+=============================
+• Containerization
+• Data acquisition and analysis
+• Data cleansing and preparation
+• Defining evaluation criteria
+• Baseline (reference) model
+• Incremental model development
+• Advanced evaluation
+• ML as a service (prototype)

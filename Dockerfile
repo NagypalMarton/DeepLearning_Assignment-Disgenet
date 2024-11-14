@@ -53,7 +53,7 @@ COPY /ssh/ssh_config /etc/ssh/ssh_config
 
 # Install Python dependencies from requirements.txt
 RUN pip install --upgrade pip \
-    && pip3 install torch==2.1.1 \
+    && pip3 install torch==2.1.1 --timeout=1000 \
     && pip3 install --no-cache-dir -r requirements.txt
 
 # Start Jupyter lab with custom password

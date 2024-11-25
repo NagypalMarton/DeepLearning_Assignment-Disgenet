@@ -1,26 +1,24 @@
-Grading
+Task
+====
+Deep Learning Homework Title: Disease-gene interaction prediction with graph neural networks Desciption: The goal of this project is to create a graph neural network for predicting disease-gene associations. Working with DisGeNET, a comprehensive database of these associations, you'll apply deep learning to an important challenge of bioinformatics. By choosing this project, you'll gain experience in the intersection of deep learning and bioinformatics while extracting valuable insights from real-world data. Dataset: https://www.disgenet.org/
 
+Related GitHub repository: https://github.com/pyg-team/pytorch_geometric
+
+Related papers: https://arxiv.org/abs/1607.00653 https://arxiv.org/abs/1611.07308
+
+Grading
+-------
 Option A
 --------
 • Oral exam (for mark)
 • Assessment from 350 points +1 mark (max 500 points)
 • Project work on a basic level (for signature)
 
-Option B
---------
-• No exam
-• Assessment
-• min 200 / 500 points
-• from 350 points +1 mark
-• Project work on an intermediate/advanced level (for mark 4 or mark 5)
-
-Intermediate / advanced level
-=============================
+Basic level
+===========
 • Containerization
-• Data acquisition and analysis
-• Data cleansing and preparation
-• Defining evaluation criteria
+• Data acqusition
+• Data preparation
 • Baseline (reference) model
-• Incremental model development
-• Advanced evaluation
-• ML as a service (prototype)
+• Model development
+• Basic evaluation

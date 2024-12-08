@@ -22,4 +22,5 @@ COPY . .
 EXPOSE 7860
 
 # Command to run the Gradio web app
-CMD ["python3", "app.py"]
+#CMD ["python3", "app.py"]
+CMD ["python3", "baseline_model.py"]

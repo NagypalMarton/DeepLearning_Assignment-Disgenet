@@ -4,7 +4,7 @@ import pandas as pd
 import torch
 from torch_geometric.data import Data
 
-API_KEY = "c89e2d9e-94b2-4b84-8d22-bb525e63b73b"
+API_KEY = "b5d672e8-f674-442c-ab41-2ea8991dd076"
 
 params = {
     "page_number": 0,

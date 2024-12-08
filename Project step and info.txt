@@ -20,3 +20,32 @@ Basic level
 4) Baseline (reference) model
 5) Model development
 6) Basic evaluation
+
+Problem Description:
+
+The objective is to develop a graph neural network (GNN) that predicts disease-gene associations using data from DisGeNET, a comprehensive database of such associations. This involves applying deep learning techniques to bioinformatics data to uncover insights into how genes and diseases are interconnected.
+
+Steps to Solve the Problem:
+
+Data Preparation:
+
+Preprocess the data to fit the GNN input requirements.
+Construct a graph where nodes represent genes and diseases, and edges represent associations.
+Split the data into training and testing sets.
+
+Baseline Model:
+
+Implement a simple model (e.g., logistic regression) to serve as a performance benchmark.
+Evaluate its performance on the dataset.
+
+Model Development:
+
+Develop a GNN model using PyTorch Geometric.
+Reference architectures from the related papers (GCN, GraphSAGE).
+Train the model on the prepared data.
+
+Basic Evaluation:
+
+Assess the GNN model's performance using appropriate metrics like accuracy and ROC-AUC.
+Compare the results with the baseline model.
+Analyze the findings to draw insights into disease-gene interactions.

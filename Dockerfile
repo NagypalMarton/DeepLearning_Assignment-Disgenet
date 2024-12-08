@@ -18,9 +18,4 @@ RUN pip3 install -r requirements.txt
 # Copy the rest of the application code into the container
 COPY . .
 
-# Expose the port that the Gradio app will run on
-EXPOSE 7860
-
-# Command to run the Gradio web app
-#CMD ["python3", "app.py"]
 CMD ["python3", "baseline_model.py"]

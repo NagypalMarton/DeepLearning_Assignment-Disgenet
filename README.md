@@ -8,9 +8,6 @@
 The goal of this project is to create a graph neural network for predicting disease-gene associations. Working with DisGeNET, a comprehensive database of these associations, you'll apply deep learning to an important challenge of bioinformatics. By choosing this project, you'll gain experience in the intersection of deep learning and bioinformatics while extracting valuable insights from real-world data.
 
 **functions of the files in the repository**<br>
-
-## Functions of the Files in the Repository
-
 - **`requirements.txt`**
   - Lists the dependencies required for the project, specifying the package names and versions.
 
@@ -45,3 +42,22 @@ Each file serves a specific purpose in the overall workflow of the project, from
 - [Dataset](https://www.disgenet.org/)
 
 **how to run it (building and running the container, running your solution within the container)** <br>
+. **Clone the Repository**:
+   1. clone the repository from GitHub:
+   ```sh
+   git clone <repository_url>
+   cd <repository_directory>
+   ```
+   2. Build the Docker Image
+   ```
+    docker build -t my_app_image .
+   ```
+   3. Run the Docker Container
+      ```
+    docker run -it my_app_image
+   ```
+**how to run the pipeline**
+
+**how to train the models**
+
+**how to evaluate the models**

@@ -42,7 +42,7 @@ Each file serves a specific purpose in the overall workflow of the project, from
 - [Dataset](https://www.disgenet.org/)
 
 **how to run it (building and running the container, running your solution within the container)** <br>
-. **Clone the Repository**:
+Clone the Repository:
    1. clone the repository from GitHub:
    ```sh
    git clone <repository_url>
@@ -53,7 +53,7 @@ Each file serves a specific purpose in the overall workflow of the project, from
     docker build -t my_app_image .
    ```
    3. Run the Docker Container
-      ```
+   ```
     docker run -it my_app_image
    ```
 **how to run the pipeline**

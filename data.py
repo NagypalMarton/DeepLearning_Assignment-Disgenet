@@ -1,106 +1,207 @@
 import requests
-import time
 import pandas as pd
-import torch
-from torch_geometric.data import Data
+import time
+from io import StringIO
+import re
+import urllib3
 
+# Specify your API key
 API_KEY = "b5d672e8-f674-442c-ab41-2ea8991dd076"
 
-params = {
-    "page_number": 0,
-    "type": "disease"
-}
+# Function to retrieve disease identifiers
+def get_disease_identifiers(disease_free_text_search_string):
+    # Initialize an empty list to collect CSV data from all pages
+    all_csv_data = []
 
-# Create a dictionary with HTTP headers
-headers = {
-    'Authorization': API_KEY,
-    'accept': 'application/json'
-}
+    for page_number in range(100):  # Request from page 0 to 100
+        # Specify query parameters
+        params = {
+            "disease_free_text_search_string": disease_free_text_search_string,
+            "type": "disease",
+            "page_number": page_number
+        }
 
-# API endpoints
-url_gda = "https://api.disgenet.com/api/v1/gda/summary"
-url_disease = "https://api.disgenet.com/api/v1/entity/disease"
-# Function to handle API requests with rate-limiting handling
-def make_request(url, params, headers):
-    retries = 0
-    while retries < 5:
-        try:
-            response = requests.get(url, params=params, headers=headers, timeout=10)
-            # If rate-limited (HTTP 429), retry after waiting
-            if response.status_code == 429:
-                wait_time = int(response.headers.get('x-rate-limit-retry-after-seconds', 60))
-                print(f"Rate limit exceeded. Waiting {wait_time} seconds...")
-                time.sleep(wait_time)
-                retries += 1
+        # HTTP headers
+        headers = {
+            "Authorization": API_KEY,
+            "accept": "application/csv"
+        }
+
+        # API endpoint
+        url = "https://api.disgenet.com/api/v1/entity/disease"
+
+        while True:
+            response = requests.get(url, params=params, headers=headers, verify=False)
+            # Successful response
+            if response.status_code == 200:
+                # Check if the response contains "-1"
+                if "-1" in response.text:
+                    print(f"Received undesired content on page {page_number}, stopping further requests.")
+                    return all_csv_data  # Return collected data
+                else:
+                    all_csv_data.append(response.text)
+                    break  # Move to the next page
+
+            # Rate limiting handling
+            elif response.status_code == 429:
+                retry_after = int(response.headers.get('x-rate-limit-retry-after-seconds', '60'))
+                print(f"Rate limit reached. Waiting for {retry_after} seconds.")
+                time.sleep(retry_after)
             else:
-                return response  # Return response if successful or error other than 429
+                print(f"Request failed on page {page_number} with status code {response.status_code}: {response.text}")
+                return None
 
-        except requests.exceptions.RequestException as e:
-            print(f"Request error: {e}")
-            retries += 1
-            time.sleep(2)  # Wait before retrying
+    return all_csv_data  # Return collected data if the loop completes
 
-    return None  # Return None if retries are exhausted
+# Sample data for demonstration (replace this with your actual DataFrame)
+    # df = pd.DataFrame({
+    #     'diseaseCodes': [
+    #         "[DiseaseCodeDTO(vocabulary=UMLS, code=C4733092)]",
+    #         "[DiseaseCodeDTO(vocabulary=MONDO, code=0000615), DiseaseCodeDTO(vocabulary=UMLS, code=C4733094)]",
+    #         # Add more rows as needed
+    #     ]
+    # })
 
-def get_max_pages(url, params=params, headers=headers):
-  response = make_request(url, params=params, headers=headers)
-  if response.ok:
-      response_json = response.json()
-      total_results = response_json.get("paging", {}).get("totalElements", 0)
-      results_in_page = response_json.get("paging", {}).get("totalElementsInPage", 0)
-      max_pages = min((total_results + results_in_page - 1) // results_in_page, 100)
-  else:
-      max_pages = 100
-      print("Request failed, returned max_pages=100")
-  return max_pages
+    # Function to extract disease identifiers
+    def extract_disease_identifiers(disease_code_str):
+        # Regular expression pattern to match 'DiseaseCodeDTO(vocabulary=..., code=...)'
+        pattern = r"DiseaseCodeDTO\(vocabulary=(.*?), code=(.*?)\)"
 
-def get_disease_ids(disease_type):
-    disease_ids = []
-    params['disease_free_text_search_string'] = disease_type
+        # Find all matches in the string
+        matches = re.findall(pattern, disease_code_str)
 
-    for page in range(100):
-      params['page_number'] = str(page)
-      response_disease = make_request(url_disease, params, headers)
-      if response_disease and response_disease.ok:
-          response_disease_json = response_disease.json()
-          data = response_disease_json.get("payload", [])
-          for item in data:
-              for code_info in item.get("diseaseCodes", []):
-                if code_info.get("vocabulary") == "MONDO":
-                  disease_ids.append(f'MONDO_{code_info.get("code")}')
-      else:
-          print(f"Failed to fetch data for page {page}. Status code: {response_disease_json.status_code}")
-          break
-    return list(set(disease_ids))
+        # Combine vocabulary and code to form the identifiers
+        disease_identifiers = []
+        for vocab, code in matches:
+            # Clean up any extra whitespace or quotes
+            vocab = vocab.strip().strip('"').strip("'")
+            code = code.strip().strip('"').strip("'")
+            identifier = f"{vocab}_{code}"
+            disease_identifiers.append(identifier)
 
-def download_gda(disease_ids):
-    gda_data = []
-    params['disease'] = disease_ids
+        return disease_identifiers
 
-    for page in range(100):
-        params['page_number'] = str(page)  # Különböző oldalak lekérése
-        response_gda = make_request(url_gda, params, headers)
-        if response_gda and response_gda.ok:
-            response_json = response_gda.json()
-            data = response_json.get("payload", [])
-            gda_data.extend(data)
-        else:
-            print(f"Failed to fetch data for page {page}. Status code: {response_json.status_code}")
-            break  # Ha nincs több oldal vagy hiba történik, kilépünk a ciklusból
+# Disable InsecureRequestWarning
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-    return gda_data
+# Your API key
+API_KEY = "b5d672e8-f674-442c-ab41-2ea8991dd076"
 
-def download_all_gda(ids, chunk_size=100):
+# Assume 'disease_identifiers_array' is already defined
+# For example:
+# disease_identifiers_array = ['UMLS_C4733092', 'MONDO_0000615', 'UMLS_C4733094']
+
+# Function to retrieve data for a disease identifier
+def get_gda_summary(disease_identifier):
+    url = "https://api.disgenet.com/api/v1/gda/summary"
+    all_csv_data = []
+
+    for page_number in range(100):  # Request from page 0 to 99
+        # Prepare parameters
+        params = {
+            'disease': disease_identifier,  # Disease code
+            'type': 'disease',              # Type parameter set to 'disease'
+            'page_number': page_number      # Current page number
+        }
+
+        # HTTP headers
+        headers = {
+            'Authorization': API_KEY,
+            'accept': 'application/csv'     # Response format set to CSV
+        }
+
+        while True:
+            response = requests.get(url, params=params, headers=headers, verify=False)
+            # Successful response
+            if response.status_code == 200:
+                if "-1" in response.text:
+                    print(f"Received undesired content for {disease_identifier} on page {page_number}, skipping to next identifier.")
+                    return all_csv_data if all_csv_data else None
+                else:
+                    all_csv_data.append(response.text)
+                    break
+
+            # Rate limiting handling
+            elif response.status_code == 429:
+                retry_after = int(response.headers.get('x-rate-limit-retry-after-seconds', '60'))
+                print(f"Rate limit reached. Waiting for {retry_after} seconds.")
+                time.sleep(retry_after)
+            else:
+                print(f"Request failed for {disease_identifier} on page {page_number} with status code {response.status_code}: {response.text}")
+                return None
+
+    return all_csv_data if all_csv_data else None
+
+# Main execution
+if __name__ == "__main__":
+    # Replace 'cancer' with your desired disease search term
+    disease_free_text_search_string = "cancer"
+
+    # Retrieve disease identifiers
+    csv_data_list = get_disease_identifiers(disease_free_text_search_string)
+    print(csv_data_list)
+
+    if csv_data_list:
+        # Combine all CSV data into a single DataFrame
+        combined_csv_data = "\n".join(csv_data_list)
+        df = pd.read_csv(StringIO(combined_csv_data), sep='\t')
+        # Save the DataFrame to a CSV file
+        df.to_csv('./data/disease_identifiers.csv', index=False)
+        print("Data has been saved to './data/disease_identifiers.csv'.")
+    else:
+        print("Failed to retrieve disease identifiers.")
+
+    print(f'Sor*Oszlop: {df.shape[0]} * {df.shape[1]}')
+    print(df.head())
+
+    # Apply the function to the 'diseaseCodes' column
+    df['disease_identifiers'] = df['diseaseCodes'].apply(extract_disease_identifiers)
+
+    # Put all disease identifiers into an array
+    disease_identifiers_array = df['disease_identifiers'].explode().tolist()
+
+    # Display the array of disease identifiers
+    print(disease_identifiers_array)
+    print(len(disease_identifiers_array))
+
+    # Ensure 'disease_identifiers_array' is defined
+    # For example, you can extract it from your DataFrame as follows:
+    # disease_identifiers_array = df['disease_identifiers'].explode().unique().tolist()
+
+    # Example:
+    # disease_identifiers_array = ['UMLS_C4733092', 'MONDO_0000615', 'UMLS_C4733094']
+
+    # Initialize a list to collect DataFrames
     all_data = []
-    for i in range(0, len(ids), chunk_size):
-        ids_chunk = ids[i:i + chunk_size]
-        ids_string = '"' + ', '.join(ids_chunk) + '"'
-        chunk_data = download_gda(ids_string)
-        all_data.extend(chunk_data)
-    df_gda = pd.DataFrame(all_data)
-    df_gda.to_csv('GDA_df_raw.csv', index=False)
-    print(f"All data saved to GDA_df_raw.csv")
-    
-disease_ids = get_disease_ids("cancer")
+    #disease_identifiers_arrayNEW = disease_identifiers_array[:25]
 
-download_all_gda(disease_ids)
+    for disease_identifier in disease_identifiers_array:
+        print(f"Processing disease identifier: {disease_identifier}")
+        csv_data_list = get_gda_summary(disease_identifier)
+
+        if csv_data_list:
+            # Combine all CSV data into a single DataFrame
+            combined_csv_data = "\n".join(csv_data_list)
+            df = pd.read_csv(StringIO(combined_csv_data), sep='\t')
+
+            # Add the disease identifier to the DataFrame
+            df['disease_identifier'] = disease_identifier
+
+            # Append the DataFrame to the list
+            all_data.append(df)
+        else:
+            print(f"No data retrieved for {disease_identifier}")
+
+    if all_data:
+        # Concatenate all DataFrames
+        final_df = pd.concat(all_data, ignore_index=True)
+
+        # Save the combined data to a CSV file
+        final_df.to_csv('./data/gda_summary_data.csv', index=False)
+        print("All data has been saved to './data/gda_summary_data.csv'.")
+        print(final_df)
+    else:
+        print("No data was retrieved.")
+
+print(f'Sor*Oszlop: {df.shape[0]} * {df.shape[1]}')
+print(df.head())

@@ -32,6 +32,10 @@ The goal of this project is to create a graph neural network for predicting dise
   - Configures logging for the baseline model.
   - Defines a Graph Convolutional Network (GCN) for link prediction.
   - Sets up the model architecture with GCN layers and a fully connected layer for link prediction.
+- **`data forder`**
+  -  Here you can find data downloaded from the Disgenet website in a CSV file, such as different cancer types and their characteristics, as well as existing gene-disease associations.
+  -  **`disease_identifiers.csv`**
+  -  **`gda_summary_data.csv`**
 
 Each file serves a specific purpose in the overall workflow of the project, from setting up the environment and fetching data to preprocessing and building a machine learning model.
 
@@ -45,16 +49,16 @@ Each file serves a specific purpose in the overall workflow of the project, from
 Clone the Repository:
    1. clone the repository from GitHub:
    ```sh
-   git clone <repository_url>
-   cd <repository_directory>
+   git clone [<https://github.com/NagypalMarton/DeepLearning_Assignment-Disgenet.git>](https://github.com/NagypalMarton/DeepLearning_Assignment-Disgenet.git)
+   cd [<https://github.com/NagypalMarton/DeepLearning_Assignment-Disgenet.git>](https://github.com/NagypalMarton/DeepLearning_Assignment-Disgenet.git)
    ```
    2. Build the Docker Image
    ```
-    docker build -t my_app_image .
+    docker build -t deeplearning_assignment .
    ```
    3. Run the Docker Container
    ```
-    docker run -it my_app_image
+    docker run -it deeplearning_assignment
    ```
 **how to run the pipeline**
 

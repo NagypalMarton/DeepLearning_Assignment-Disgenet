@@ -49,8 +49,8 @@ Each file serves a specific purpose in the overall workflow of the project, from
 Clone the Repository:
    1. clone the repository from GitHub:
    ```sh
-   git clone [<https://github.com/NagypalMarton/DeepLearning_Assignment-Disgenet.git>](https://github.com/NagypalMarton/DeepLearning_Assignment-Disgenet.git)
-   cd [<https://github.com/NagypalMarton/DeepLearning_Assignment-Disgenet.git>](https://github.com/NagypalMarton/DeepLearning_Assignment-Disgenet.git)
+   git clone [https://github.com/NagypalMarton/DeepLearning_Assignment-Disgenet.git](https://github.com/NagypalMarton/DeepLearning_Assignment-Disgenet.git)
+   cd [https://github.com/NagypalMarton/DeepLearning_Assignment-Disgenet.git](https://github.com/NagypalMarton/DeepLearning_Assignment-Disgenet.git)
    ```
    2. Build the Docker Image
    ```
@@ -65,3 +65,47 @@ Clone the Repository:
 **how to train the models**
 
 **how to evaluate the models**
+
+---
+
+**how to run the pipeline?**
+1. **Start the Docker container**:
+To run the project, build and start the environment using Docker:
+```bash
+docker build -t deeplearning_assignment .
+docker run -it deeplearning_assignment
+```
+2. **Running the pipeline**:
+Each step of the pipeline is encapsulated in a script. To start the pipeline, run:
+```bash
+python pipeline.py
+```
+This script automatically performs the data retrieval, preparation, and other steps.
+
+---
+
+**how to train the models?**
+1. **Baseline model training**:
+The baseline model is trained using the following script:
+```bash
+python train_baseline.py
+```
+This uses a simple Graph Convolutional Network (GCN) model for link prediction.
+
+2. **GNN model training**:
+To train the graph neural network, run:
+```bash
+python train_gnn.py
+```
+You can modify the configurations for training in the `config.py` file.
+
+---
+
+**how to evaluate the models?**
+1. **Running the evaluation script**:
+To evaluate the trained models, use the following script:
+```bash
+python evaluate_model.py
+```
+2. **Saving and visualizing results**:
+The evaluation results (e.g. accuracy, ROC curves) are saved in the `results/` folder. The visualizations generated during the evaluation can be found in the `plots/` folder.

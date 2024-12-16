@@ -18,4 +18,4 @@ RUN pip3 install -r requirements.txt
 # Copy the rest of the application code into the container
 COPY . .
 
-CMD ["python3", "baseline_model.py"]
+CMD ["python3", "run_pipeline.py"]

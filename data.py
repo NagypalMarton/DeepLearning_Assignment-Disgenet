@@ -53,7 +53,7 @@ def get_disease_identifiers(disease_free_text_search_string):
 
     return all_csv_data  # Return collected data if the loop completes
 
-# Sample data for demonstration (replace this with your actual DataFrame)
+    # Sample data for demonstration (replace this with your actual DataFrame)
     # df = pd.DataFrame({
     #     'diseaseCodes': [
     #         "[DiseaseCodeDTO(vocabulary=UMLS, code=C4733092)]",
@@ -63,29 +63,26 @@ def get_disease_identifiers(disease_free_text_search_string):
     # })
 
     # Function to extract disease identifiers
-    def extract_disease_identifiers(disease_code_str):
+def extract_disease_identifiers(disease_code_str):
         # Regular expression pattern to match 'DiseaseCodeDTO(vocabulary=..., code=...)'
-        pattern = r"DiseaseCodeDTO\(vocabulary=(.*?), code=(.*?)\)"
+    pattern = r"DiseaseCodeDTO\(vocabulary=(.*?), code=(.*?)\)"
 
         # Find all matches in the string
-        matches = re.findall(pattern, disease_code_str)
+    matches = re.findall(pattern, disease_code_str)
 
         # Combine vocabulary and code to form the identifiers
-        disease_identifiers = []
-        for vocab, code in matches:
+    disease_identifiers = []
+    for vocab, code in matches:
             # Clean up any extra whitespace or quotes
-            vocab = vocab.strip().strip('"').strip("'")
-            code = code.strip().strip('"').strip("'")
-            identifier = f"{vocab}_{code}"
-            disease_identifiers.append(identifier)
+        vocab = vocab.strip().strip('"').strip("'")
+        code = code.strip().strip('"').strip("'")
+        identifier = f"{vocab}_{code}"
+        disease_identifiers.append(identifier)
 
-        return disease_identifiers
+    return disease_identifiers
 
 # Disable InsecureRequestWarning
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-
-# Your API key
-API_KEY = "b5d672e8-f674-442c-ab41-2ea8991dd076"
 
 # Assume 'disease_identifiers_array' is already defined
 # For example:
@@ -160,10 +157,6 @@ if __name__ == "__main__":
     # Put all disease identifiers into an array
     disease_identifiers_array = df['disease_identifiers'].explode().tolist()
 
-    # Display the array of disease identifiers
-    print(disease_identifiers_array)
-    print(len(disease_identifiers_array))
-
     # Ensure 'disease_identifiers_array' is defined
     # For example, you can extract it from your DataFrame as follows:
     # disease_identifiers_array = df['disease_identifiers'].explode().unique().tolist()
@@ -202,6 +195,3 @@ if __name__ == "__main__":
         print(final_df)
     else:
         print("No data was retrieved.")
-
-print(f'Sor*Oszlop: {df.shape[0]} * {df.shape[1]}')
-print(df.head())

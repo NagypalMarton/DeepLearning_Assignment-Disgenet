@@ -73,7 +73,7 @@ docker run -it deeplearning_assignment
 2. **Running the pipeline**:
 Each step of the pipeline is encapsulated in a script. To start the pipeline, run:
 ```bash
-python data.py
+start.sh
 ```
 This script automatically performs the data retrieval, preparation, and other steps.
 

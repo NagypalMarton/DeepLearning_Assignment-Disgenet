@@ -60,11 +60,6 @@ Clone the Repository:
    ```
     docker run -it deeplearning_assignment
    ```
-**how to run the pipeline**
-
-**how to train the models**
-
-**how to evaluate the models**
 
 ---
 
@@ -78,7 +73,7 @@ docker run -it deeplearning_assignment
 2. **Running the pipeline**:
 Each step of the pipeline is encapsulated in a script. To start the pipeline, run:
 ```bash
-python pipeline.py
+python data.py
 ```
 This script automatically performs the data retrieval, preparation, and other steps.
 
